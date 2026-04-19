@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Collaborative Code Editor</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="data:,">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💻 Collaborative Editor</h1>
+
+    <div class="top-bar">
+        <input id="username" placeholder="Username">
+        <input id="room" placeholder="Room ID">
+        <button onclick="joinRoom()">Join</button>
+    </div>
+
+    <p id="status">🔴 Not Connected</p>
+    <ul id="users"></ul>
+    <p id="activity"></p>
+    <p id="typing"></p>
+
+    <div id="editor" style="height: 500px;"></div>
+
+    <div>
+        <button onclick="runCode()">▶️ Run Code</button>
+        <button onclick="copyOutput()">📋 Copy Output</button>
+        <button onclick="copyRoomLink()">🔗 Share Room</button>
+    </div>
+
+    <pre id="output"></pre>
+
+    <div class="chat-box">
+        <div id="messages"></div>
+        <input id="chatInput" placeholder="Message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+</div>
+
+<!-- Correct order -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
