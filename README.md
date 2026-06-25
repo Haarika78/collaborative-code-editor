@@ -229,10 +229,4 @@ git push origin feature-name
 
 ---
 
-## 📌 Author
-
-**Haarika78**
-
----
-
 
