@@ -1,149 +1,123 @@
 # 💻 Collaborative Code Editor
 
-A real-time collaborative code editor that allows multiple users to join a shared room, write code together, communicate via chat, and execute Python code—all in sync.
+A web-based collaborative code editor where multiple users can work on the same code in real time. Users can join a room, edit code together, chat with other users, see their cursors, and run Python code.
 
----
+## 🚀 Features
 
-## 🚀 Features at a Glance
-
-* 🧑‍🤝‍🧑 Real-time multi-user collaboration
-* ⚡ Instant code synchronization
+* 🧑‍🤝‍🧑 Real-time code editing
+* 👥 Multiple users in the same room
+* ⚡ Code synchronization between users
 * 🖱️ Live cursor tracking with user labels
-* 💬 Built-in chat system
+* 💬 Chat between users in a room
 * ⌨️ Typing indicators
-* ▶️ Run Python code with output display
-* 💾 Auto-save code per room (in-memory)
+* ▶️ Python code execution
+* 📤 Displays the output of executed code
 * 🔗 Shareable room links
-* 🎨 Monaco Editor (VS Code-like UI)
-
----
+* 💾 Auto-save of code while the room is active
+* 🎨 Monaco Editor for the coding interface
 
 ## 🛠️ Tech Stack
 
-**Frontend**
+### Frontend
 
-* HTML, CSS, JavaScript
-* Monaco Editor
+* 🌐 HTML
+* 🎨 CSS
+* ⚙️ JavaScript
+* 📝 Monaco Editor
 
-**Backend**
+### Backend
 
-* Flask
-* Flask-SocketIO
+* 🐍 Python
+* 🌶️ Flask
+* 🔌 Flask-SocketIO
 
-**Communication**
+### Communication
 
-* WebSockets (Socket.IO)
-
----
+* 🔄 WebSockets
+* 📡 Socket.IO
 
 ## ⚙️ Getting Started
 
-### 1️⃣ Clone the Repository
+### 1️⃣ Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/collaborative-code-editor.git
+git clone https://github.com/Haarika78/collaborative-code-editor.git
 cd collaborative-code-editor
 ```
 
-### 2️⃣ Install Dependencies
+### 2️⃣ Install the dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3️⃣ Run the Application
+### 3️⃣ Start the application
 
 ```bash
 python app.py
 ```
 
-### 4️⃣ Open in Browser
+### 4️⃣ Open the application
 
-```
+Open the following URL in your browser:
+
+```text
 http://127.0.0.1:5003
 ```
 
----
-
 ## 📁 Project Structure
 
-```
-collaborative-editor/
+```text
+collaborative-code-editor/
 │
-├── app.py                  # Flask backend with Socket.IO
-├── requirements.txt        # Python dependencies
+├── app.py
+├── requirements.txt
 │
 ├── templates/
-│   └── index.html          # Main frontend UI
+│   └── index.html
 │
 ├── static/
-│   ├── script.js           # Client-side logic
-│   └── style.css           # Styling
+│   ├── script.js
+│   └── style.css
 │
-└── README.md               # Documentation
+└── README.md
 ```
-
----
 
 ## 🔄 How It Works
 
-### 1. Room-Based Collaboration
+### 🏠 Rooms
 
-Users join a room using a Room ID. Each room acts as a shared workspace.
+Users can create or join a room using a Room ID. Users in the same room can work on the same code.
 
-### 2. Real-Time Communication
+### ⚡ Code Synchronization
 
-Flask-SocketIO enables event-driven communication:
+When a user changes the code, the change is sent to the server using Socket.IO and then shared with the other users in the room.
 
-* `join` → user joins room
-* `code_change` → sync code
-* `cursor_move` → track cursor
-* `send_message` → chat
+An `isUpdating` flag is used on the client side to prevent unnecessary update loops.
 
-### 3. Code Synchronization
+### 🖱️ Cursor Tracking
 
-* Editor changes are emitted to the server
-* Server broadcasts updates to all users
-* `isUpdating` flag prevents infinite loops
+Cursor positions are sent between users so that everyone can see where the other users are working. Each user is displayed with their own label.
 
-### 4. Cursor Tracking
+### 💬 Chat
 
-Each user's cursor position is shared and rendered with unique styling.
+Users in the same room can send messages through the built-in chat. The application also shows when another user is typing.
 
-### 5. Code Execution
+### ▶️ Python Code Execution
 
-* Code is written to a temporary file
-* Executed using subprocess
-* Output returned to clients
+Python code written in the editor can be executed from the application. The code is temporarily written to a file and executed using Python's `subprocess` module. The output is then displayed to the user.
 
-### 6. Auto-Save System
+### 💾 Auto-Save
 
-Code is stored in memory per room and reloaded when users join.
-
-### 7. Shareable Rooms
-
-Room links can be generated and shared for instant collaboration.
-
----
-
-## 🧪 Diagnosed Mistake Types
-
-During development, the following issues were identified and resolved:
-
-* ❌ Socket.IO version mismatch → Fixed by aligning client & server versions
-* ❌ `io is undefined` → Caused by script loading order (Monaco conflict)
-* ❌ Duplicate socket initialization → Resolved by single initialization
-* ❌ 400 Bad Request (WebSocket) → Fixed via correct dependency versions
-* ❌ Infinite update loop → Solved using `isUpdating` flag
-* ❌ Cursor flickering → Fixed using proper decoration handling
-
----
+The current code is stored in memory for each room. When users join or reconnect to a room, the stored code can be loaded again while the application is running.
 
 ## 🌱 Environment Variables
 
-Create a `.env` file (optional):
+The application can use a secret key through an environment variable.
 
-```
+Create a `.env` file:
+
+```text
 SECRET_KEY=your_secret_key
 ```
 
@@ -151,58 +125,22 @@ In `app.py`:
 
 ```python
 import os
+
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_key')
 ```
 
----
+## 📌 Current Status
 
-## 🚀 Deployment
+The project is working locally and has been tested with multiple users connecting to the same room.
 
-### Option 1: Local Deployment
+It is currently not deployed to a cloud hosting platform.
 
-```bash
-python app.py
-```
+## 🔮 Future Improvements
 
----
-
-### Option 2: Render / Railway (Recommended)
-
-1. Push code to GitHub
-2. Connect repository to hosting platform
-3. Add build/start commands:
-
-**Build Command**
-
-```bash
-pip install -r requirements.txt
-```
-
-**Start Command**
-
-```bash
-python app.py
-```
-
----
-
-### Option 3: Production Setup (Advanced)
-
-Use:
-
-* Gunicorn
-* Eventlet
-
-```bash
-pip install gunicorn
-gunicorn -k eventlet -w 1 app:app
-```
-
----
-
-
-5. Open a Pull Request
-
----
-
-
+* ☁️ Deploy the application online
+* 💾 Add database support for persistent rooms and code
+* 🔐 Add user authentication
+* 🔒 Improve security for Python code execution
+* 🧩 Add support for more programming languages
+* 👥 Improve room and user management
+* 🧪 Add automated tests
