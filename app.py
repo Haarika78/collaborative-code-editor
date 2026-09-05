@@ -6,9 +6,9 @@ import os
 import sys
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
 
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
 
 room_users = {}
 room_code = {}  # ✅ store code per room
@@ -109,4 +109,4 @@ def handle_run_code(data):
 
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True, port=5003)
+    socketio.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5003)))
