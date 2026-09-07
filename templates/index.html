@@ -1,49 +1,284 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Collaborative Code Editor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CodeCollab — Collaborative Code Editor</title>
+
     <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" href="data:,">
 </head>
 
 <body>
 
-<div class="container">
+<div class="app-shell">
 
-    <h1>💻 Collaborative Editor</h1>
+    <!-- HEADER -->
+    <header class="app-header">
 
-    <div class="top-bar">
-        <input id="username" placeholder="Username">
-        <input id="room" placeholder="Room ID">
-        <button onclick="joinRoom()">Join</button>
-    </div>
+        <div class="brand">
+            <div class="brand-icon">◈</div>
 
-    <p id="status">🔴 Not Connected</p>
-    <ul id="users"></ul>
-    <p id="activity"></p>
-    <p id="typing"></p>
+            <div>
+                <div class="brand-name">CodeCollab</div>
+                <div class="brand-subtitle">Real-time collaborative editor</div>
+            </div>
+        </div>
 
-    <div id="editor" style="height: 500px;"></div>
+        <div class="header-room">
+            <span class="room-label">ROOM</span>
+            <span id="headerRoom">Not joined</span>
+        </div>
 
-    <div>
-        <button onclick="runCode()">▶️ Run Code</button>
-        <button onclick="copyOutput()">📋 Copy Output</button>
-        <button onclick="copyRoomLink()">🔗 Share Room</button>
-    </div>
+        <div class="header-actions">
 
-    <pre id="output"></pre>
+            <div id="status" class="connection-status disconnected">
+                <span class="status-dot"></span>
+                Disconnected
+            </div>
 
-    <div class="chat-box">
-        <div id="messages"></div>
-        <input id="chatInput" placeholder="Message...">
-        <button onclick="sendMessage()">Send</button>
-    </div>
+            <button class="share-button" onclick="copyRoomLink()">
+                <span>↗</span>
+                Share
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- JOIN BAR -->
+    <section class="join-bar">
+
+        <div class="join-input-group">
+
+            <div class="field">
+                <label for="username">USERNAME</label>
+                <input
+                    id="username"
+                    type="text"
+                    placeholder="Enter your name"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="field">
+                <label for="room">ROOM ID</label>
+                <input
+                    id="room"
+                    type="text"
+                    placeholder="e.g. team-42"
+                    autocomplete="off"
+                >
+            </div>
+
+            <button class="join-button" onclick="joinRoom()">
+                Join Room
+            </button>
+
+        </div>
+
+        <div class="activity-area">
+
+            <span id="activity"></span>
+            <span id="typing"></span>
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN WORKSPACE -->
+    <main class="workspace">
+
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sidebar-section">
+
+                <div class="section-heading">
+                    <span>COLLABORATORS</span>
+                    <span id="userCount" class="count-badge">0</span>
+                </div>
+
+                <ul id="users" class="user-list"></ul>
+
+            </div>
+
+
+            <div class="sidebar-divider"></div>
+
+
+            <div class="sidebar-section info-section">
+
+                <div class="section-heading">
+                    <span>ROOM</span>
+                </div>
+
+                <div class="room-info">
+
+                    <div class="info-row">
+                        <span>Status</span>
+                        <strong id="roomStatus">Not joined</strong>
+                    </div>
+
+                    <div class="info-row">
+                        <span>Language</span>
+                        <strong>Python</strong>
+                    </div>
+
+                    <div class="info-row">
+                        <span>Editor</span>
+                        <strong>Monaco</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- CENTER -->
+        <section class="editor-area">
+
+
+            <!-- EDITOR HEADER -->
+            <div class="editor-header">
+
+                <div class="file-tab">
+                    <span class="python-icon">🐍</span>
+                    main.py
+                </div>
+
+                <div class="editor-actions">
+
+                    <button class="toolbar-button run-button"
+                            onclick="runCode()">
+                        <span>▶</span>
+                        Run Code
+                    </button>
+
+                    <button class="toolbar-button"
+                            onclick="copyOutput()">
+                        <span>⧉</span>
+                        Copy Output
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- MONACO -->
+            <div class="editor-wrapper">
+                <div id="editor"></div>
+            </div>
+
+
+            <!-- OUTPUT -->
+            <div class="output-panel">
+
+                <div class="panel-header">
+
+                    <div class="panel-title">
+                        <span class="terminal-icon">›_</span>
+                        OUTPUT
+                    </div>
+
+                    <button class="clear-output"
+                            onclick="document.getElementById('output').innerText=''">
+                        Clear
+                    </button>
+
+                </div>
+
+                <pre id="output">Ready to run your Python code...</pre>
+
+            </div>
+
+        </section>
+
+
+        <!-- CHAT -->
+        <aside class="chat-panel">
+
+            <div class="chat-header">
+
+                <div>
+                    <div class="chat-title">Team Chat</div>
+                    <div class="chat-subtitle">
+                        Collaborate with your team
+                    </div>
+                </div>
+
+                <div class="chat-online">
+                    <span></span>
+                    Live
+                </div>
+
+            </div>
+
+
+            <div id="messages" class="messages"></div>
+
+
+            <div class="chat-input-area">
+
+                <input
+                    id="chatInput"
+                    type="text"
+                    placeholder="Message your team..."
+                    autocomplete="off"
+                    onkeydown="if(event.key === 'Enter') sendMessage()"
+                >
+
+                <button onclick="sendMessage()" class="send-button">
+                    ↑
+                </button>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="status-bar">
+
+        <div class="status-left">
+
+            <span>Python 3</span>
+            <span class="separator">•</span>
+            <span>UTF-8</span>
+            <span class="separator">•</span>
+            <span>Spaces: 4</span>
+
+        </div>
+
+        <div class="status-right">
+
+            <span>Socket.IO</span>
+            <span class="separator">•</span>
+            <span id="footerStatus">Offline</span>
+
+        </div>
+
+    </footer>
 
 </div>
 
-<!-- Correct order -->
+
+<!-- Socket.IO -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+
+<!-- Monaco -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+
+<!-- Application JS -->
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>

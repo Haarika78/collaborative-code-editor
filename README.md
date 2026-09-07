@@ -1,6 +1,6 @@
 # 💻 Collaborative Code Editor
 
-A web-based collaborative code editor where multiple users can work on the same code in real time. Users can join a room, edit code together, chat with other users, see their cursors, and run Python code.
+A web-based collaborative code editor where multiple users can work on the same code in real time. Users can join a room, edit code together, chat with other users, see each other's cursors, and run Python code.
 
 ## 🚀 Features
 
@@ -15,6 +15,7 @@ A web-based collaborative code editor where multiple users can work on the same 
 * 🔗 Shareable room links
 * 💾 Auto-save of code while the room is active
 * 🎨 Monaco Editor for the coding interface
+* 📱 Responsive interface
 
 ## 🛠️ Tech Stack
 
@@ -35,6 +36,11 @@ A web-based collaborative code editor where multiple users can work on the same 
 
 * 🔄 WebSockets
 * 📡 Socket.IO
+
+### Deployment
+
+* ☁️ Render
+* 🚀 Gunicorn
 
 ## ⚙️ Getting Started
 
@@ -69,9 +75,11 @@ http://127.0.0.1:5003
 
 ```text
 collaborative-code-editor/
+
 │
 ├── app.py
 ├── requirements.txt
+├── .gitignore
 │
 ├── templates/
 │   └── index.html
@@ -87,17 +95,17 @@ collaborative-code-editor/
 
 ### 🏠 Rooms
 
-Users can create or join a room using a Room ID. Users in the same room can work on the same code.
+Users can create or join a room using a Room ID. Users in the same room can work on the same code and communicate with each other.
 
 ### ⚡ Code Synchronization
 
-When a user changes the code, the change is sent to the server using Socket.IO and then shared with the other users in the room.
+When a user changes the code, the updated code is sent to the server using Socket.IO and then shared with the other users in the same room.
 
 An `isUpdating` flag is used on the client side to prevent unnecessary update loops.
 
 ### 🖱️ Cursor Tracking
 
-Cursor positions are sent between users so that everyone can see where the other users are working. Each user is displayed with their own label.
+Cursor positions are sent between users so that everyone can see where the other users are working. Each user's cursor is displayed with a user label.
 
 ### 💬 Chat
 
@@ -105,7 +113,9 @@ Users in the same room can send messages through the built-in chat. The applicat
 
 ### ▶️ Python Code Execution
 
-Python code written in the editor can be executed from the application. The code is temporarily written to a file and executed using Python's `subprocess` module. The output is then displayed to the user.
+Python code written in the editor can be executed from the application. The code is temporarily written to a file and executed using Python's `subprocess` module. The output is then displayed in the output panel.
+
+The execution also has a timeout to prevent programs from running indefinitely.
 
 ### 💾 Auto-Save
 
@@ -121,19 +131,26 @@ Create a `.env` file:
 SECRET_KEY=your_secret_key
 ```
 
-In `app.py`:
+Make sure `.env` is included in `.gitignore` so the secret key is not uploaded to GitHub.
 
-```python
-import os
+## 🌐 Deployment
 
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_key')
-```
+The application can be deployed as a Python Web Service using Render.
+
+The live demo link will be added here after deployment.
 
 ## 📌 Current Status
 
-The project is working locally and has been tested with multiple users connecting to the same room.
-
-It is currently not deployed to a cloud hosting platform.
+* ✅ Project working locally
+* ✅ Real-time code editing
+* ✅ Multi-user rooms
+* ✅ Code synchronization
+* ✅ Live cursor tracking
+* ✅ Team chat
+* ✅ Typing indicators
+* ✅ Python code execution
+* ✅ Modern IDE-style interface
+* ⏳ Cloud deployment
 
 ## 🔮 Future Improvements
 
@@ -144,3 +161,11 @@ It is currently not deployed to a cloud hosting platform.
 * 🧩 Add support for more programming languages
 * 👥 Improve room and user management
 * 🧪 Add automated tests
+
+## ⚠️ Security Note
+
+The current Python execution feature runs submitted code on the server using a subprocess. For production use with untrusted users, code execution should be isolated using a secure sandbox or container-based environment.
+
+---
+
+⭐ Thanks for checking out the project!
