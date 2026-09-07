@@ -78,7 +78,7 @@ http://127.0.0.1:5003
 
 ## 📁 Project Structure
 
-  text
+```text
 collaborative-code-editor/
 │
 ├── app.py
@@ -93,7 +93,6 @@ collaborative-code-editor/
 │   └── style.css
 │
 └── README.md
-
 
 ## 🔄 How It Works
 
