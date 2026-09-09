@@ -41,11 +41,12 @@ window.addEventListener("load", () => {
             clearTimeout(typingTimeout);
 
             typingTimeout = setTimeout(() => {
-                socket.emit("code_change", {
-                    room,
-                    code: editor.getValue()
-                });
-            }, 300);
+    socket.emit("code_change", {
+        room,
+        code: editor.getValue(),
+        sent_at: Date.now()
+    });
+}, 300);
 
             socket.emit("typing", { room, user: username });
         });
@@ -85,22 +86,28 @@ window.addEventListener("load", () => {
         document.getElementById("activity").textContent = msg;
     });
 
-    socket.on("update_code", code => {
-        if (!editor) return;
+    socket.on("update_code", data => {
+    if (!editor) return;
 
-        isUpdating = true;
+    // Calculate synchronization latency
+    if (data.sent_at !== undefined) {
+        const latency = Date.now() - data.sent_at;
+        console.log(`Sync latency: ${latency} ms`);
+    }
 
-        editor.getModel().pushEditOperations(
-            [],
-            [{
-                range: editor.getModel().getFullModelRange(),
-                text: code
-            }],
-            () => null
-        );
+    isUpdating = true;
 
-        isUpdating = false;
-    });
+    editor.getModel().pushEditOperations(
+        [],
+        [{
+            range: editor.getModel().getFullModelRange(),
+            text: data.code
+        }],
+        () => null
+    );
+
+    isUpdating = false;
+});
 
     socket.on("typing", msg => {
         const typing = document.getElementById("typing");

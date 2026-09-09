@@ -44,15 +44,24 @@ def handle_join(data):
     emit('activity', f"{user} joined the room", room=room)
 
 
-# ✅ CODE SYNC + SAVE
+# ✅ CODE SYNC + SAVE + LATENCY MEASUREMENT
 @socketio.on('code_change')
 def handle_code(data):
     room = data['room']
     code = data['code']
+    sent_at = data.get('sent_at')
 
     room_code[room] = code  # save
 
-    emit('update_code', code, room=room, include_self=False)
+    emit(
+        'update_code',
+        {
+            'code': code,
+            'sent_at': sent_at
+        },
+        room=room,
+        include_self=False
+    )
 
 
 # ✅ TYPING
