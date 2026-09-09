@@ -90,7 +90,7 @@ window.addEventListener("load", () => {
     if (!editor) return;
 
     // Calculate synchronization latency
-    if (data.sent_at !== undefined) {
+    if (data.sent_at != null) {
         const latency = Date.now() - data.sent_at;
         console.log(`Sync latency: ${latency} ms`);
     }
@@ -183,6 +183,41 @@ window.joinRoom = () => {
     document.getElementById("roomStatus").textContent = "Active";
 
     socket.emit("join", { room, user: username });
+};
+
+// Leave room
+window.leaveRoom = () => {
+    if (!room) {
+        alert("You are not currently in a room");
+        return;
+    }
+
+    socket.emit("leave_room", {
+        room: room,
+        user: username
+    });
+
+    // Clear local room information
+    room = "";
+    username = "";
+
+    document.getElementById("headerRoom").textContent = "Not joined";
+    document.getElementById("roomStatus").textContent = "Not joined";
+
+    // Clear collaborators
+    document.getElementById("users").innerHTML = "";
+
+    const count = document.getElementById("userCount");
+    if (count) {
+        count.textContent = "0";
+    }
+
+    // Clear activity
+    document.getElementById("activity").textContent = "";
+
+    // Clear username and room inputs
+    document.getElementById("username").value = "";
+    document.getElementById("room").value = "";
 };
 
 // Run code

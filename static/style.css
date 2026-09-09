@@ -339,6 +339,26 @@ body {
     font-weight: 500;
 }
 
+.leave-button {
+    width: 100%;
+    height: 32px;
+    margin-top: 14px;
+    background: #2a1518;
+    border: 1px solid #5a292e;
+    border-radius: 6px;
+    color: #ef8b92;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .15s ease;
+}
+
+.leave-button:hover {
+    background: #3a1b1f;
+    border-color: #7a343b;
+    color: #ffadb2;
+}
+
 /* Editor */
 
 .editor-area {
@@ -649,7 +669,7 @@ body {
     }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 650px) {
     body {
         overflow: auto;
     }
